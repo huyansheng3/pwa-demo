@@ -65,6 +65,20 @@ window.addEventListener('beforeinstallprompt', function(e) {
   })
 })
 
+// self.addEventListener('message', event => {
+//   console.log('receive message' + event.data)
+//   // 更新根目录下的 html 文件。
+//   var url = self.location.href
+//   console.log('update root file ' + url)
+//   event.waitUntil(
+//     caches.open(CURRENT_CACHES.prefetch).then(cache => {
+//       return fetch(url).then(res => {
+//         cache.put(url, res)
+//       })
+//     })
+//   )
+// })
+
 function registerValidSW(swUrl) {
   navigator.serviceWorker
     .register(swUrl)
@@ -78,6 +92,7 @@ function registerValidSW(swUrl) {
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
+              
               console.log('New content is available; please refresh.')
             } else {
               // At this point, everything has been precached.

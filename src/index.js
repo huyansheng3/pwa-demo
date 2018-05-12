@@ -18,3 +18,9 @@ window.addEventListener('beforeinstallprompt', function(e) {
     }
   })
 })
+
+// if (SW.controller) {
+//   // 这是当前页面的 `controller`
+//   console.log('send message ::')
+//   SW.controller.postMessage('fetch document')
+// }
