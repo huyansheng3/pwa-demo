@@ -23,7 +23,7 @@ class App extends Component {
   componentDidMount() {
     const url = 'http://www.waka.life/api/v2/static_infos/countries_cities'
     axios.get(url).then(data => {
-      console.log(data)
+      console.log('componentDidMount', data)
     })
   }
 }
