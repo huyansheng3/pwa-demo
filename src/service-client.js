@@ -41,7 +41,7 @@ export function swInit() {
     .catch(function(err) {})
   if (SW.controller) {
     console.log('send message ::')
-    SW.controller.postMessage(location.href)
+    SW.controller.postMessage(window.location.href)
   }
   // 进行 web-push 订阅
   navigator.serviceWorker.ready.then(reg => {
