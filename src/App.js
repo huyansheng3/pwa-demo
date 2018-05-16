@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
 import axios from 'axios'
-
+import { swInit } from './service-client'
 //
 
 class App extends Component {
@@ -21,6 +21,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    swInit()
     const url = 'http://www.waka.life/api/v2/static_infos/countries_cities'
     axios.get(url).then(data => {
       console.log('componentDidMount', data)

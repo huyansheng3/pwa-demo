@@ -1,145 +1,184 @@
-// In production, we register a service worker to serve assets from local cache.
+importScripts('./path-to-regexp.js')
 
-// This lets the app load faster on subsequent visits in production, and gives
-// it offline capabilities. However, it also means that developers (and users)
-// will only see deployed updates on the "N+1" visit to a page, since previously
-// cached resources are updated in the background.
+const CACHE_VERSION = 1
 
-// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
-// This link also includes instructions on opting out of this behavior.
+const CURRENT_CACHES = {
+  prefetch: 'prefetch-cache-v' + CACHE_VERSION,
+}
+const FILE_LISTS = ['js', 'css', 'png']
+const PATH_FILE = '/:file?' // 缓存接受的路径文件
 
-const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
-    // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' ||
-    // 127.0.0.1/8 is considered localhost for IPv4.
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
-)
-
-export default function register() {
-  if ('serviceWorker' in navigator) {
-    // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location)
-    if (publicUrl.origin !== window.location.origin) {
-      // Our service worker won't work if PUBLIC_URL is on a different origin
-      // from what our page is served on. This might happen if a CDN is used to
-      // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
-      return
-    }
-
-    window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
-      registerValidSW(swUrl)
-
-      // if (isLocalhost) {
-      //   // This is running on localhost. Lets check if a service worker still exists or not.
-      //   checkValidServiceWorker(swUrl)
-
-      //   // Add some additional logging to localhost, pointing developers to the
-      //   // service worker/PWA documentation.
-      //   navigator.serviceWorker.ready.then(() => {
-      //     console.log(
-      //       'This web app is being served cache-first by a service ' +
-      //         'worker. To learn more, visit https://goo.gl/SC7cgQ'
-      //     )
-      //   })
-      // } else {
-      //   // Is not local host. Just register service worker
-      //   registerValidSW(swUrl)
-      // }
-    })
+var goSaving = function(url) {
+  for (var file of FILE_LISTS) {
+    if (url.endsWith(file)) return true
   }
+  return false
 }
 
-window.addEventListener('beforeinstallprompt', function(e) {
-  // beforeinstallprompt event fired
+// 判断 path/method/contentType
 
-  e.userChoice.then(function(choiceResult) {
-    if (choiceResult.outcome === 'dismissed') {
-      console.log('用户取消安装应用')
-    } else {
-      console.log('用户安装了应用')
-    }
-  })
+function checkFile(request) {
+  var matchPath = pathtoRegexp(PATH_FILE)
+  var url = location.pathname
+  var method = request.method.toLowerCase()
+  url = matchPath.exec(url)[1]
+  return !!(goSaving(url) && method === 'get')
+}
+
+self.addEventListener('install', function(event) {
+  var now = Date.now()
+
+  var urlsToPrefetch = ['vendor.js']
+
+  event.waitUntil(
+    caches
+      .open(CURRENT_CACHES.prefetch)
+      .then(function(cache) {
+        var cachePromises = urlsToPrefetch.map(function(urlToPrefetch) {
+          var url = new URL(urlToPrefetch, location.href)
+
+          console.log('now send the request to' + url)
+
+          var request = new Request(url)
+          return fetch(request)
+            .then(function(response) {
+              if (response.status >= 400) {
+                throw new Error(
+                  'request for ' +
+                    urlToPrefetch +
+                    ' failed with status ' +
+                    response.statusText
+                )
+              }
+
+              return cache.put(urlToPrefetch, response)
+            })
+            .catch(function(error) {
+              console.error('Not caching ' + urlToPrefetch + ' due to ' + error)
+            })
+        })
+
+        return Promise.all(cachePromises).then(function() {
+          console.log('Pre-fetching complete.')
+        })
+      })
+      .catch(function(error) {
+        console.error('Pre-fetching failed:', error)
+      })
+  )
 })
 
-// self.addEventListener('message', event => {
-//   console.log('receive message' + event.data)
-//   // 更新根目录下的 html 文件。
-//   var url = self.location.href
-//   console.log('update root file ' + url)
-//   event.waitUntil(
-//     caches.open(CURRENT_CACHES.prefetch).then(cache => {
-//       return fetch(url).then(res => {
-//         cache.put(url, res)
-//       })
-//     })
-//   )
-// })
+self.addEventListener('fetch', function(event) {
+  console.log('on fetch', event.request)
+  // 检查是否需要缓存
+  if (!checkFile(event.request)) return
 
-function registerValidSW(swUrl) {
-  navigator.serviceWorker
-    .register(swUrl)
-    .then(registration => {
-      registration.onupdatefound = () => {
-        const installingWorker = registration.installing
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              // At this point, the old content will have been purged and
-              // the fresh content will have been added to the cache.
-              // It's the perfect time to display a "New content is
-              // available; please refresh." message in your web app.
-              
-              console.log('New content is available; please refresh.')
-            } else {
-              // At this point, everything has been precached.
-              // It's the perfect time to display a
-              // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.')
-            }
-          }
-        }
-      }
-    })
-    .catch(error => {
-      console.error('Error during service worker registration:', error)
-    })
-}
-
-function checkValidServiceWorker(swUrl) {
-  // Check if the service worker can be found. If it can't reload the page.
-  fetch(swUrl)
-    .then(response => {
-      // Ensure service worker exists, and that we really are getting a JS file.
-      if (
-        response.status === 404 ||
-        response.headers.get('content-type').indexOf('javascript') === -1
-      ) {
-        // No service worker found. Probably a different app. Reload the page.
-        navigator.serviceWorker.ready.then(registration => {
-          registration.unregister().then(() => {
-            window.location.reload()
+  event.respondWith(
+    caches.match(event.request).then(function(resp) {
+      return (
+        resp ||
+        fetch(event.request).then(function(response) {
+          console.log('save file:' + location.href)
+          // 需要缓存,则将资源放到 caches Object 中
+          return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
+            cache.put(event.request, response.clone())
+            return response
           })
         })
-      } else {
-        // Service worker found. Proceed as normal.
-        registerValidSW(swUrl)
-      }
-    })
-    .catch(() => {
-      console.log(
-        'No internet connection found. App is running in offline mode.'
       )
     })
+  )
+})
+
+// method
+// resource
+
+self.addEventListener('activate', event => {
+  // delete any caches that aren't in expectedCaches
+  // which will get rid of static-v1
+  event.waitUntil(
+    caches
+      .keys()
+      .then(keys =>
+        Promise.all(
+          keys.map(key => {
+            if (CURRENT_CACHES.prefetch.includes(key)) {
+              console.log('old sw.js will be updated。...')
+              return caches.delete(key)
+            }
+          })
+        )
+      )
+      .then(() => {
+        console.log('V2 now ready to handle fetches!')
+      })
+  )
+})
+
+self.addEventListener('message', event => {
+  // test send note
+  sendNote()
+
+  console.log('receive message' + event.data)
+  // 更新根目录下的 html 文件。
+  var url = self.location.href
+  console.log('update root file ' + url)
+  event.waitUntil(
+    caches.open(CURRENT_CACHES.prefetch).then(cache => {
+      return fetch(url).then(res => {
+        cache.put(url, res)
+      })
+    })
+  )
+})
+
+self.addEventListener('push', function(event) {})
+
+self.addEventListener('notificationclick', function(event) {
+  var messageId = event.notification.data
+  event.notification.close()
+  if (event.action === 'focus') {
+    focusOpen()
+  }
+})
+
+function sendNote() {
+  console.log('send Note')
+  var title = 'Yay a message.'
+  var body = 'We have received a push message.'
+  var icon = '/student.png'
+  var tag = 'simple-push-demo-notification-tag' + Math.random()
+  var data = {
+    doge: {
+      wow: 'such amaze notification data',
+    },
+  }
+  self.registration.showNotification(title, {
+    body: body,
+    icon: icon,
+    tag: tag,
+    data: data,
+    actions: [
+      {
+        action: 'focus',
+        title: 'focus',
+      },
+    ],
+  })
 }
 
-export function unregister() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(registration => {
-      registration.unregister()
+function focusOpen() {
+  var url = location.href
+  clients
+    .matchAll({
+      type: 'window',
+      includeUncontrolled: true,
     })
-  }
+    .then(clients => {
+      for (var client of clients) {
+        if ((client.url = url)) return client.focus() // 只在手机端有效,PC 上无效
+      }
+      console.log('not focus')
+      clients.openWindow(location.origin)
+    })
 }
