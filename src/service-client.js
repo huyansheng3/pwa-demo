@@ -35,16 +35,36 @@ function subscribe() {
 
 export function swInit() {
   if ('Notification' in window) {
-    Notification.requestPermission && Notification.requestPermission()
+    Notification.requestPermission()
   }
 
   if ('serviceWorker' in navigator) {
     var SW = navigator.serviceWorker
     SW.register('sw.js')
-      .then(function(registration) {})
-      .catch(function(err) {})
+      .then(function(registration) {
+        registration.onupdatefound = function() {
+          var installingWorker = registration.installing
+          installingWorker.onstatechange = function() {
+            switch (installingWorker.state) {
+              case 'installed':
+                if (navigator.serviceWorker.controller) {
+                  var event = document.createEvent('Event')
+                  event.initEvent('sw.update', true, true)
+                  window.dispatchEvent(event)
+                }
+                break
+            }
+          }
+        }
+
+        console.log('register success')
+      })
+      .catch(function(err) {
+        console.log('register error', err)
+      })
     if (SW.controller) {
       console.log('send message ::')
+      debugger
       SW.controller.postMessage(window.location.href)
     }
     // 进行 web-push 订阅

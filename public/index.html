@@ -19,7 +19,8 @@
   <!-- Content-Security-Policy "style-src 'self'; script-src https://www.google-analytics 'self' data: blob: https:; img-src 
 'self' data: https:; font-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https:; object-src 'none';" -->
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' * 'unsafe-inline'">
+  <!-- 行吧 研究一天 终于 发现 https 的站点是无法请求 http的站点的 -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' * 'unsafe-inline'"> -->
 
   <!--
       manifest.json provides metadata used when your web app is added to the
