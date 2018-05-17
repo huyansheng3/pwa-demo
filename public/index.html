@@ -16,7 +16,10 @@
   <link rel=apple-touch-startup-image media="(device-width: 414px)" href=/1242.png>
   <link rel=apple-touch-startup-image media="(device-width: 768px)" href=/1536.png>
 
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <!-- Content-Security-Policy "style-src 'self'; script-src https://www.google-analytics 'self' data: blob: https:; img-src 
+'self' data: https:; font-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https:; object-src 'none';" -->
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' * 'unsafe-inline'">
 
   <!--
       manifest.json provides metadata used when your web app is added to the
