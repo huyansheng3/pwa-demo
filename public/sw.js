@@ -70,7 +70,6 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
   console.log('on fetch', event.request)
-  debugger
   // 检查是否需要缓存
   if (!checkFile(event.request)) return
 
