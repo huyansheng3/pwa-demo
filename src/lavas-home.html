@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang=zh_CN>
+
+<head>
+  <title></title>
+  <meta charset=utf-8>
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
+  <link rel=preload href=/static/js/manifest.2266f97d.js as=script>
+  <link rel=preload href=/static/js/vue.0bac564a.js as=script>
+  <link rel=preload href=/static/js/vendor.e03dcaa4.js as=script>
+  <link rel=preload href=/static/js/index.23f258a0.js as=script>
+  <link rel=preload href=/static/css/index.68156a82.css as=style>
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
+  <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+  <link rel=manifest href=/static/manifest.json>
+  <meta name=theme-color content=#1976d2>
+  <meta name=apple-mobile-web-app-capable content=yes>
+  <meta name=apple-mobile-web-app-status-bar-style content=black>
+  <meta name=apple-mobile-web-app-title content=LAVAS>
+  <link rel=apple-touch-icon href=/static/img/icons/android-chrome-192x192.png>
+  <meta name=msapplication-TileImage content=/static/img/icons/android-chrome-192x192.png>
+  <meta name=msapplication-TileColor content=#1976d2>
+  <link rel=apple-touch-startup-image media="(device-width: 320px)" href=/static/img/launches/apple-launch-640x1136.png>
+  <link rel=apple-touch-startup-image media="(device-width: 375px)" href=/static/img/launches/apple-launch-750x1334.png>
+  <link rel=apple-touch-startup-image media="(device-width: 414px)" href=/static/img/launches/apple-launch-1242x2208.png>
+  <link rel=apple-touch-startup-image media="(device-width: 768px)" href=/static/img/launches/apple-launch-1536x2048.png>
+  <style>
+    /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
+
+    html {
+      line-height: 1.15;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%
+    }
+
+    body {
+      margin: 0
+    }
+
+    article,
+    aside,
+    footer,
+    header,
+    nav,
+    section {
+      display: block
+    }
+
+    h1 {
+      font-size: 2em;
+      margin: .67em 0
+    }
+
+    figcaption,
+    figure,
+    main {
+      display: block
+    }
+
+    figure {
+      margin: 1em 40px
+    }
+
+    hr {
+      box-sizing: content-box;
+      height: 0;
+      overflow: visible
+    }
+
+    pre {
+      font-family: monospace, monospace;
+      font-size: 1em
+    }
+
+    a {
+      background-color: transparent;
+      -webkit-text-decoration-skip: objects
+    }
+
+    abbr[title] {
+      border-bottom: none;
+      text-decoration: underline;
+      text-decoration: underline dotted
+    }
+
+    b,
+    strong {
+      font-weight: inherit;
+      font-weight: bolder
+    }
+
+    code,
+    kbd,
+    samp {
+      font-family: monospace, monospace;
+      font-size: 1em
+    }
+
+    dfn {
+      font-style: italic
+    }
+
+    mark {
+      background-color: #ff0;
+      color: #000
+    }
+
+    small {
+      font-size: 80%
+    }
+
+    sub,
+    sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline
+    }
+
+    sub {
+      bottom: -.25em
+    }
+
+    sup {
+      top: -.5em
+    }
+
+    audio,
+    video {
+      display: inline-block
+    }
+
+    audio:not([controls]) {
+      display: none;
+      height: 0
+    }
+
+    img {
+      border-style: none
+    }
+
+    svg:not(:root) {
+      overflow: hidden
+    }
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      font-family: sans-serif;
+      font-size: 100%;
+      line-height: 1.15;
+      margin: 0
+    }
+
+    button,
+    input {
+      overflow: visible
+    }
+
+    button,
+    select {
+      text-transform: none
+    }
+
+    [type=reset],
+    [type=submit],
+    button,
+    html [type=button] {
+      -webkit-appearance: button
+    }
+
+    [type=button]::-moz-focus-inner,
+    [type=reset]::-moz-focus-inner,
+    [type=submit]::-moz-focus-inner,
+    button::-moz-focus-inner {
+      border-style: none;
+      padding: 0
+    }
+
+    [type=button]:-moz-focusring,
+    [type=reset]:-moz-focusring,
+    [type=submit]:-moz-focusring,
+    button:-moz-focusring {
+      outline: 1px dotted ButtonText
+    }
+
+    fieldset {
+      padding: .35em .75em .625em
+    }
+
+    legend {
+      box-sizing: border-box;
+      color: inherit;
+      display: table;
+      max-width: 100%;
+      padding: 0;
+      white-space: normal
+    }
+
+    progress {
+      display: inline-block;
+      vertical-align: baseline
+    }
+
+    textarea {
+      overflow: auto
+    }
+
+    [type=checkbox],
+    [type=radio] {
+      box-sizing: border-box;
+      padding: 0
+    }
+
+    [type=number]::-webkit-inner-spin-button,
+    [type=number]::-webkit-outer-spin-button {
+      height: auto
+    }
+
+    [type=search] {
+      -webkit-appearance: textfield;
+      outline-offset: -2px
+    }
+
+    [type=search]::-webkit-search-cancel-button,
+    [type=search]::-webkit-search-decoration {
+      -webkit-appearance: none
+    }
+
+    ::-webkit-file-upload-button {
+      -webkit-appearance: button;
+      font: inherit
+    }
+
+    details,
+    menu {
+      display: block
+    }
+
+    summary {
+      display: list-item
+    }
+
+    canvas {
+      display: inline-block
+    }
+
+    [hidden],
+    template {
+      display: none
+    }
+
+    .skeleton-wrapper[data-v-02e80502] {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 100%
+    }
+
+    .skeleton-wrapper .skeleton-header[data-v-02e80502] {
+      height: 64px;
+      background: #1976d2
+    }
+
+    .skeleton-wrapper .skeleton-block[data-v-02e80502] {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      padding-top: 8px
+    }
+
+    #boostrap-splash[data-v-02e80502] {
+      width: 120px;
+      height: 120px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -60px 0 0 -60px
+    }
+
+    #boostrap-splash-bound-1[data-v-02e80502],
+    #boostrap-splash-bound-2[data-v-02e80502] {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #1976d2;
+      opacity: .6;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: boostrap-splash-data-v-02e80502 2s infinite ease-in-out
+    }
+
+    #boostrap-splash-bound-2[data-v-02e80502] {
+      animation-delay: -1s
+    }
+
+    @media screen and (max-width:767px) {
+      .skeleton-wrapper .skeleton-header[data-v-02e80502] {
+        height: 56px
+      }
+    }
+
+    @keyframes boostrap-splash-data-v-02e80502 {
+      0%,
+      to {
+        transform: scale(0)
+      }
+      50% {
+        transform: scale(1)
+      }
+    }
+  </style>
+  <link rel="shortcut icon" href=/favicon.ico>
+  <link href=/static/css/index.68156a82.css rel=stylesheet>
+</head>
+
+<body>
+  <div id=app>
+    <div data-server-rendered=true class=skeleton-wrapper data-v-02e80502>
+      <header class=skeleton-header data-v-02e80502></header>
+      <section class=skeleton-block data-v-02e80502>
+        <div id=boostrap-splash data-v-02e80502>
+          <div id=boostrap-splash-bound-1 data-v-02e80502></div>
+          <div id=boostrap-splash-bound-2 data-v-02e80502></div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script>
+    /* eslint-disable */
+    var _hmt = _hmt || [];
+    (function () {
+      var hm = document.createElement('script');
+      hm.src = 'https://hm.baidu.com/hm.js?1f90fbd48e0cb39ca05b884f4d2ef3fa';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    /* eslint-enable */
+  </script>
+  <script type=text/javascript src=/static/js/manifest.2266f97d.js></script>
+  <script type=text/javascript src=/static/js/vue.0bac564a.js></script>
+  <script type=text/javascript src=/static/js/vendor.e03dcaa4.js></script>
+  <script type=text/javascript src=/static/js/index.23f258a0.js></script>
+  <script>
+    window.onload = function () {
+      var script = document.createElement('script');
+      var firstScript = document.getElementsByTagName('script')[0];
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = '/sw-register.js?v=' + Date.now();
+      firstScript.parentNode.insertBefore(script, firstScript);
+    };
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js?v=20180404123116').then(function (reg) {
+        reg.onupdatefound = function () {
+          var installingWorker = reg.installing;
+          installingWorker.onstatechange = function () {
+            switch (installingWorker.state) {
+              case 'installed':
+                if (navigator.serviceWorker.controller) {
+                  var event = document.createEvent('Event');
+                  event.initEvent('sw.update', true, true);
+                  window.dispatchEvent(event)
+                }
+                break;
+            }
+          }
+        }
+      }).catch(function (e) {
+        console.error('Error during service worker registration:', e)
+      })
+    }
+  </script>
+</body>
+
+</html>

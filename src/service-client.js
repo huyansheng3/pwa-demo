@@ -34,20 +34,25 @@ function subscribe() {
 }
 
 export function swInit() {
-  Notification.requestPermission()
-  var SW = navigator.serviceWorker
-  SW.register('sw.js')
-    .then(function(registration) {})
-    .catch(function(err) {})
-  if (SW.controller) {
-    console.log('send message ::')
-    SW.controller.postMessage(window.location.href)
+  if ('Notification' in window) {
+    Notification.requestPermission && Notification.requestPermission()
   }
-  // 进行 web-push 订阅
-  navigator.serviceWorker.ready.then(reg => {
-    reg.pushManager.getSubscription().then(sub => {
-      if (sub) return
-      subscribe()
+
+  if ('serviceWorker' in navigator) {
+    var SW = navigator.serviceWorker
+    SW.register('sw.js')
+      .then(function(registration) {})
+      .catch(function(err) {})
+    if (SW.controller) {
+      console.log('send message ::')
+      SW.controller.postMessage(window.location.href)
+    }
+    // 进行 web-push 订阅
+    navigator.serviceWorker.ready.then(reg => {
+      reg.pushManager.getSubscription().then(sub => {
+        if (sub) return
+        subscribe()
+      })
     })
-  })
+  }
 }
