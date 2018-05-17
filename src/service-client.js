@@ -57,16 +57,17 @@ export function swInit() {
           }
         }
 
+        if (SW.controller) {
+          console.log('send message ::')
+          SW.controller.postMessage(window.location.href)
+        }
+
         console.log('register success')
       })
       .catch(function(err) {
         console.log('register error', err)
       })
-    if (SW.controller) {
-      console.log('send message ::')
-      debugger
-      SW.controller.postMessage(window.location.href)
-    }
+
     // 进行 web-push 订阅
     navigator.serviceWorker.ready.then(reg => {
       reg.pushManager.getSubscription().then(sub => {

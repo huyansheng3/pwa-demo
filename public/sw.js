@@ -120,9 +120,10 @@ self.addEventListener('message', event => {
   // test send note
   sendNote()
 
+  debugger
   console.log('receive message' + event.data)
   // 更新根目录下的 html 文件。
-  var url = self.location.href
+  var url = event.data
   console.log('update root file ' + url)
   event.waitUntil(
     caches.open(CURRENT_CACHES.prefetch).then(cache => {
@@ -154,18 +155,18 @@ function sendNote() {
       wow: 'such amaze notification data',
     },
   }
-  self.registration.showNotification(title, {
-    body: body,
-    icon: icon,
-    tag: tag,
-    data: data,
-    actions: [
-      {
-        action: 'focus',
-        title: 'focus',
-      },
-    ],
-  })
+  // self.registration.showNotification(title, {
+  //   body: body,
+  //   icon: icon,
+  //   tag: tag,
+  //   data: data,
+  //   actions: [
+  //     {
+  //       action: 'focus',
+  //       title: 'focus',
+  //     },
+  //   ],
+  // })
 }
 
 function focusOpen() {
