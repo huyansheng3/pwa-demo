@@ -27,7 +27,7 @@ function checkFile(request) {
 
 self.addEventListener('install', function(event) {
   var now = Date.now()
-
+  debugger
   var urlsToPrefetch = ['vendor.js']
 
   event.waitUntil(
@@ -70,6 +70,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
   console.log('on fetch', event.request)
+  debugger
   // 检查是否需要缓存
   if (!checkFile(event.request)) return
 
@@ -94,6 +95,7 @@ self.addEventListener('fetch', function(event) {
 // resource
 
 self.addEventListener('activate', event => {
+  debugger
   // delete any caches that aren't in expectedCaches
   // which will get rid of static-v1
   event.waitUntil(

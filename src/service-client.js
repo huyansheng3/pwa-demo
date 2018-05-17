@@ -34,6 +34,7 @@ function subscribe() {
 }
 
 export function swInit() {
+  debugger
   if ('Notification' in window) {
     Notification.requestPermission && Notification.requestPermission()
   }
