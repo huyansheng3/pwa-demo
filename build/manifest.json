@@ -23,9 +23,8 @@
       "type": "image/png"
     }
   ],
-  "orientation": "landscape",
   "start_url": "/?standalone=1",
+  "background_color": "#ffffff",
   "display": "standalone",
-  "theme_color": "blue",
-  "background_color": "blue"
+  "theme_color": "#1976d2"
 }
