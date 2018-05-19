@@ -10,7 +10,7 @@
   <link rel=preload href=/static/js/vendor.e03dcaa4.js as=script>
   <link rel=preload href=/static/js/index.23f258a0.js as=script>
   <link rel=preload href=/static/css/index.68156a82.css as=style>
-  <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
   <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
   <link rel=manifest href=/static/manifest.json>
   <meta name=theme-color content=#1976d2>
@@ -354,29 +354,6 @@
       script.src = '/sw-register.js?v=' + Date.now();
       firstScript.parentNode.insertBefore(script, firstScript);
     };
-  </script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js?v=20180404123116').then(function (reg) {
-        reg.onupdatefound = function () {
-          var installingWorker = reg.installing;
-          installingWorker.onstatechange = function () {
-            switch (installingWorker.state) {
-              case 'installed':
-                if (navigator.serviceWorker.controller) {
-                  var event = document.createEvent('Event');
-                  event.initEvent('sw.update', true, true);
-                  window.dispatchEvent(event)
-                }
-                break;
-            }
-          }
-        }
-      }).catch(function (e) {
-        console.error('Error during service worker registration:', e)
-      })
-    }
   </script>
 </body>
 
