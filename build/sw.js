@@ -1,10 +1,13 @@
 importScripts('./path-to-regexp.js')
 
-const CACHE_VERSION = 1
+const isDev = true
+
+const CACHE_VERSION = 3
 
 const CURRENT_CACHES = {
   prefetch: 'prefetch-cache-v' + CACHE_VERSION,
 }
+
 const FILE_LISTS = ['js', 'css', 'png']
 const PATH_FILE = '/:file?' // 缓存接受的路径文件
 
@@ -27,8 +30,12 @@ function checkFile(request) {
 
 self.addEventListener('install', function(event) {
   var now = Date.now()
-  debugger
   var urlsToPrefetch = ['vendor.js']
+
+  if (isDev) {
+    // 开发环境跳过等待，直接激活当前 sw，保证是最新的 sw，便于调试开发
+    event.waitUntil(self.skipWaiting())
+  }
 
   event.waitUntil(
     caches
@@ -74,16 +81,18 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches
       .keys()
-      .then(keys =>
-        Promise.all(
+      .then(keys => {
+        console.log('keys: ', keys)
+        return Promise.all(
           keys.map(key => {
-            if (CURRENT_CACHES.prefetch.includes(key)) {
+            if (CURRENT_CACHES.prefetch !== key) {
+              // 当前缓存不一致的全部给清了
               console.log('old sw.js will be updated。...')
               return caches.delete(key)
             }
           })
         )
-      )
+      })
       .then(() => {
         console.log('V2 now ready to handle fetches!')
       })
@@ -99,12 +108,16 @@ self.addEventListener('fetch', function(event) {
     caches.match(event.request).then(function(resp) {
       if (resp) {
         // 优先项目文件没有 hash 控制，所以每次读缓存，同时异步更新缓存，如果有 hash 控制，则没有必要如此浪费流量
-        fetch(event.request).then(function(response) {
-          console.log('update file:' + location.href)
-          return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
-            return cache.put(event.request, response.clone())
+        fetch(event.request)
+          .then(function(response) {
+            console.log('event.request:' + event)
+            return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
+              return cache.put(event.request, response.clone())
+            })
           })
-        })
+          .catch(error => {
+            console.log('event.request error:' + error)
+          })
         return resp
       }
 
@@ -138,7 +151,19 @@ self.addEventListener('message', event => {
   )
 })
 
-self.addEventListener('push', function(event) {})
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Received.')
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
+
+  const title = '推送标题'
+  const options = {
+    body: 'Yay it works.',
+    icon: 'images/icon.png',
+    badge: 'images/badge.png',
+  }
+
+  event.waitUntil(self.registration.showNotification(title, options))
+})
 
 self.addEventListener('notificationclick', function(event) {
   var messageId = event.notification.data
@@ -150,7 +175,7 @@ self.addEventListener('notificationclick', function(event) {
 
 function sendNote() {
   console.log('send Note')
-  var title = 'Yay a message.'
+  var title = '收到了一个 message'
   var body = 'We have received a push message.'
   var icon = '/student.png'
   var tag = 'simple-push-demo-notification-tag' + Math.random()

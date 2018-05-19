@@ -10,12 +10,12 @@ const app = express()
 
 const vapidKeys = {
   publicKey:
-    'BPLISiRYgXzzLY_-mKahMBdYPeRZU-8bFVzgJMcDuthMxD08v0cEfc9krx6pG5VGOC31oX_QEuOSgU5CYLqpzf0',
-  privateKey: 'mRBtp5ZrkLp5sMiRpl833OcYqLcgLO8lvN5vFRiRw8o',
+    'BMlWwbt-bVsiXBCh6pMB_LTrFSwcFEybrHCKuiXnhIaVRy-GPMJ9WT1DwRIQvTd560rqOb0GqRrUbuv4MQ0P-aQ',
+  privateKey: 'XsqOyB3LRGrTpu26qr7DtXX54Xesycmmof4hwHXvGow',
 }
 
 webpush.setVapidDetails(
-  'mailto:villainthr@gmail.com',
+  'mailto:1211904437@qq.com',
   vapidKeys.publicKey,
   vapidKeys.privateKey
 )
