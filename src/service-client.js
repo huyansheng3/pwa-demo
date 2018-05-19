@@ -39,40 +39,41 @@ export function swInit() {
   }
 
   if ('serviceWorker' in navigator) {
-    var SW = navigator.serviceWorker
-    SW.register('sw.js')
-      .then(function(registration) {
-        registration.onupdatefound = function() {
-          var installingWorker = registration.installing
-          installingWorker.onstatechange = function() {
-            switch (installingWorker.state) {
-              case 'installed':
-                if (navigator.serviceWorker.controller) {
-                  var event = document.createEvent('Event')
-                  event.initEvent('sw.update', true, true)
-                  window.dispatchEvent(event)
-                }
-                break
+    window.addEventListener('load', function() {
+      var SW = navigator.serviceWorker
+      SW.register('sw.js', { scope: '/' })
+        .then(function(registration) {
+          registration.onupdatefound = function() {
+            var installingWorker = registration.installing
+            installingWorker.onstatechange = function() {
+              switch (installingWorker.state) {
+                case 'installed':
+                  if (navigator.serviceWorker.controller) {
+                    var event = document.createEvent('Event')
+                    event.initEvent('sw.update', true, true)
+                    window.dispatchEvent(event)
+                  }
+                  break
+              }
             }
           }
-        }
+          if (SW.controller) {
+            console.log('send message ::')
+            SW.controller.postMessage(window.location.href)
+          }
 
-        if (SW.controller) {
-          console.log('send message ::')
-          SW.controller.postMessage(window.location.href)
-        }
+          console.log('register success')
+        })
+        .catch(function(err) {
+          console.log('register error', err)
+        })
 
-        console.log('register success')
-      })
-      .catch(function(err) {
-        console.log('register error', err)
-      })
-
-    // 进行 web-push 订阅
-    navigator.serviceWorker.ready.then(reg => {
-      reg.pushManager.getSubscription().then(sub => {
-        if (sub) return
-        subscribe()
+      // 进行 web-push 订阅
+      navigator.serviceWorker.ready.then(reg => {
+        reg.pushManager.getSubscription().then(sub => {
+          if (sub) return
+          subscribe()
+        })
       })
     })
   }
