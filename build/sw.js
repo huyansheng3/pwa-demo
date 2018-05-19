@@ -68,33 +68,7 @@ self.addEventListener('install', function(event) {
   )
 })
 
-self.addEventListener('fetch', function(event) {
-  console.log('on fetch', event.request)
-  // 检查是否需要缓存
-  if (!checkFile(event.request)) return
-
-  event.respondWith(
-    caches.match(event.request).then(function(resp) {
-      return (
-        resp ||
-        fetch(event.request).then(function(response) {
-          console.log('save file:' + location.href)
-          // 需要缓存,则将资源放到 caches Object 中
-          return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
-            cache.put(event.request, response.clone())
-            return response
-          })
-        })
-      )
-    })
-  )
-})
-
-// method
-// resource
-
 self.addEventListener('activate', event => {
-  debugger
   // delete any caches that aren't in expectedCaches
   // which will get rid of static-v1
   event.waitUntil(
@@ -113,6 +87,36 @@ self.addEventListener('activate', event => {
       .then(() => {
         console.log('V2 now ready to handle fetches!')
       })
+  )
+})
+
+self.addEventListener('fetch', function(event) {
+  console.log('on fetch', event.request)
+  // 检查是否需要缓存
+  if (!checkFile(event.request)) return
+
+  event.respondWith(
+    caches.match(event.request).then(function(resp) {
+      if (resp) {
+        // 优先项目文件没有 hash 控制，所以每次读缓存，同时异步更新缓存，如果有 hash 控制，则没有必要如此浪费流量
+        fetch(event.request).then(function(response) {
+          console.log('update file:' + location.href)
+          return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
+            return cache.put(event.request, response.clone())
+          })
+        })
+        return resp
+      }
+
+      return fetch(event.request).then(function(response) {
+        console.log('save file:' + location.href)
+        // 需要缓存,则将资源放到 caches Object 中
+        return caches.open(CURRENT_CACHES.prefetch).then(function(cache) {
+          cache.put(event.request, response.clone())
+          return response
+        })
+      })
+    })
   )
 })
 
@@ -155,18 +159,18 @@ function sendNote() {
       wow: 'such amaze notification data',
     },
   }
-  // self.registration.showNotification(title, {
-  //   body: body,
-  //   icon: icon,
-  //   tag: tag,
-  //   data: data,
-  //   actions: [
-  //     {
-  //       action: 'focus',
-  //       title: 'focus',
-  //     },
-  //   ],
-  // })
+  self.registration.showNotification(title, {
+    body: body,
+    icon: icon,
+    tag: tag,
+    data: data,
+    actions: [
+      {
+        action: 'focus',
+        title: 'focus',
+      },
+    ],
+  })
 }
 
 function focusOpen() {
