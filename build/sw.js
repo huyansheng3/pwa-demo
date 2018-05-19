@@ -8,7 +8,7 @@ const CURRENT_CACHES = {
   prefetch: 'prefetch-cache-v' + CACHE_VERSION,
 }
 
-const FILE_LISTS = ['js', 'css', 'png']
+const FILE_LISTS = ['js', 'css', 'png', 'svg']
 const PATH_FILE = '/:file?' // 缓存接受的路径文件
 
 var goSaving = function(url) {
@@ -137,7 +137,6 @@ self.addEventListener('message', event => {
   // test send note
   sendNote()
 
-  debugger
   console.log('receive message' + event.data)
   // 更新根目录下的 html 文件。
   var url = event.data
@@ -155,7 +154,8 @@ self.addEventListener('push', function(event) {
   console.log('[Service Worker] Push Received.')
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`)
 
-  const title = '推送标题'
+  const data = event.data.json() || {}
+  const title = data.title || '推送标题'
   const options = {
     body: 'Yay it works.',
     icon: 'images/icon.png',
