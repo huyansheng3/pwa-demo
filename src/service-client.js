@@ -13,7 +13,7 @@ function urlBase64ToUint8Array(base64String) {
 
 function subscribe() {
   const publicKey =
-    'BMlWwbt-bVsiXBCh6pMB_LTrFSwcFEybrHCKuiXnhIaVRy-GPMJ9WT1DwRIQvTd560rqOb0GqRrUbuv4MQ0P-aQ'
+    'BPKOph-DinoK781b-tcoQIvaRq4CyO6FS0C_a3R3H3jhIHJHXCE40bIhoP8sJcjz--_YE_Zi--_RjvNfvIhsOXI'
 
   var key = urlBase64ToUint8Array(publicKey)
   navigator.serviceWorker.ready.then(reg => {

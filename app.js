@@ -10,8 +10,8 @@ const app = express()
 
 const vapidKeys = {
   publicKey:
-    'BMlWwbt-bVsiXBCh6pMB_LTrFSwcFEybrHCKuiXnhIaVRy-GPMJ9WT1DwRIQvTd560rqOb0GqRrUbuv4MQ0P-aQ',
-  privateKey: 'XsqOyB3LRGrTpu26qr7DtXX54Xesycmmof4hwHXvGow',
+    'BPKOph-DinoK781b-tcoQIvaRq4CyO6FS0C_a3R3H3jhIHJHXCE40bIhoP8sJcjz--_YE_Zi--_RjvNfvIhsOXI',
+  privateKey: 'gQnlA1RjjwX5GPCy61G0WR-pWn1zSvyh6eA4Sd50o98',
 }
 
 webpush.setVapidDetails(
